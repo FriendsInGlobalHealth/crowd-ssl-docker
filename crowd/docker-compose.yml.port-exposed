@@ -1,0 +1,25 @@
+# Port is exposed to host as 80 for testing purposes only 
+# (Once confirmed working the ports line is removed to ensure 
+# all traffic is routed through proxy server. 
+version: '2'
+services:
+    mysql-crowd:
+       build: mysql
+       container_name: mysql-crowd
+       volumes:
+         - /opt/backups:/opt/backups
+       hostname: mysql-crowd
+       restart: unless-stopped
+    crowd-fgh:
+       image: blacklabelops/crowd
+       ports:
+         - "80:8095"
+       container_name: crowd-fgh
+       depends_on:
+         - mysql-crowd
+       links:
+         - mysql-crowd
+       volumes: 
+         - /opt/data/atlassian/crowd
+       hostname: crowd-fgh
+       restart: unless-stopped

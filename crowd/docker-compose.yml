@@ -1,0 +1,20 @@
+version: '2'
+services:
+    mysql-crowd:
+       build: mysql
+       container_name: mysql-crowd
+       volumes:
+         - /opt/backups:/opt/backups
+       hostname: mysql-crowd
+       restart: unless-stopped
+    crowd-fgh:
+       image: blacklabelops/crowd
+       container_name: crowd-fgh
+       depends_on:
+         - mysql-crowd
+       links:
+         - mysql-crowd
+       volumes: 
+         - /opt/data/atlassian/crowd
+       hostname: crowd-fgh
+       restart: unless-stopped
